@@ -1,0 +1,26 @@
+# (C) Copyright Uwe Schindler (Generics Policeman) and others.
+# Parts of this work are licensed to the Apache Software Foundation (ASF)
+# under one or more contributor license agreements.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# These methods and classes should be replaced by calls that are better suited
+
+@defaultMessage Avoid unchecked warnings by using Collections#empty(List|Map|Set) methods. You might need to use the following notation to make type-inference work: Collections.<SampleClass>emptyList()
+java.util.Collections#EMPTY_LIST
+java.util.Collections#EMPTY_MAP
+java.util.Collections#EMPTY_SET
+
+@defaultMessage Stopping threads explicitly leads to inconsistent states. Use interrupt() instead.
+java.lang.Thread#stop()
+java.lang.Thread#stop(java.lang.Throwable)
