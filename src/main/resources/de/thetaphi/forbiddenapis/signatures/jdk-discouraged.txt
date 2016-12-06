@@ -20,7 +20,3 @@
 java.util.Collections#EMPTY_LIST
 java.util.Collections#EMPTY_MAP
 java.util.Collections#EMPTY_SET
-
-@defaultMessage Stopping threads explicitly leads to inconsistent states. Use interrupt() instead.
-java.lang.Thread#stop()
-java.lang.Thread#stop(java.lang.Throwable)
