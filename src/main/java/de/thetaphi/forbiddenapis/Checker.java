@@ -35,6 +35,7 @@ import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -70,6 +71,7 @@ public final class Checker implements RelatedClassLookup, Constants {
   private final NavigableSet<String> runtimePaths;
     
   final Logger logger;
+  final List<String> logs = new ArrayList<String>();
   
   final ClassLoader loader;
   final java.lang.reflect.Method method_Class_getModule, method_Module_getName;
@@ -337,8 +339,8 @@ public final class Checker implements RelatedClassLookup, Constants {
         throw new WrapperRuntimeException(cnfe);
       } else {
         logger.warn(String.format(Locale.ENGLISH,
-          "The referenced class '%s' cannot be loaded. Please fix the classpath!",
-          type.getClassName()
+                "The referenced class '%s' cannot be loaded. Please fix the classpath!",
+                type.getClassName()
         ));
         return null;
       }
@@ -625,6 +627,7 @@ public final class Checker implements RelatedClassLookup, Constants {
     for (final ForbiddenViolation v : violations) {
       for (final String line : splitter.split(v.format(className, scanner.getSourceFile()))) {
         logger.error(line);
+        logs.add(line);
       }
     }
     return violations.size();
@@ -652,7 +655,13 @@ public final class Checker implements RelatedClassLookup, Constants {
         classesToCheck.size(), (System.currentTimeMillis() - start) / 1000.0, errors);
     if (options.contains(Option.FAIL_ON_VIOLATION) && errors > 0) {
       logger.error(message);
-      throw new ForbiddenApiException("Check for forbidden API calls failed, see log.");
+
+      // Workaround until https://github.com/policeman-tools/forbidden-apis/issues/134 is fixed.
+      StringBuilder msg = new StringBuilder("Check for forbidden API calls failed:");
+      for( String log : logs) {
+        msg.append("\n").append(log);
+      }
+      throw new ForbiddenApiException(msg.toString());
     } else {
       logger.info(message);
     }
